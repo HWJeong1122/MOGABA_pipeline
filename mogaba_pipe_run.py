@@ -8,9 +8,8 @@ from mogaba_pipe_pos         import *
 SaveCSFit  = True           # if  'True', save cross-scan Gaussian fitting plots
 SaveCSLog  = True           # if  'True', save cross-scan log info
 SavePSLog  = True           # if  'True', save position-switching log info
-Auto_Flag  = False          # if  'True', auto-flagging mode is applied to bad scan(s) in position-switching data
 SaveACPlot = False          # !!! Please note that LR-swapping is forecd at 129 GHz (@ line 200) !!!
-
+Auto_Flag  = False          # if  'True', auto-flagging mode is applied to bad scan(s) in position-switching data
 Run_CSFit  = True           # if 'True', cross-scan fit will be performed using the MCMC ; elsewhere, skip cs-fit
 LR_Swap    = False          # set 'True' if you want to swap into RL pol order
                             # * NOTE: LR_Swap is forces to be 'True' at D-band
@@ -170,44 +169,58 @@ for Nfile, file in enumerate(files):
     """
     project = file.split(f"_{station}.sdd")[0]
 
-    filter_cslogs=lambda x:np.logical_and(f"{station}_Log_CS_{project}_" in x, ".xlsx" in x)
-    filter_pslogs=lambda x:np.logical_and(f"{project}_"                  in x, ".xlsx" in x)
-    filter_cs_all=lambda x:"all" in x    ;    filter_cs_sour=lambda x:not "all" in x
-    filter_ps_all=lambda x:"All" in x    ;    filter_ps_sour=lambda x:not "All" in x
+    filter_cslogs = lambda x:np.logical_and(f"{station}_Log_CS_{project}_" in x, ".xlsx" in x)
+    filter_pslogs = lambda x:np.logical_and(f"{project}_"                  in x, ".xlsx" in x)
+    filter_cs_all = lambda x:"all" in x
+    filter_ps_all = lambda x:"All" in x
+    filter_cs_sour = lambda x:not "all" in x
+    filter_ps_sour = lambda x:not "All" in x
 
-    cslog_all_=list(filter(filter_cslogs, os.listdir(path_cslog)))
-    cslog_all =list(filter(filter_cs_all , cslog_all_))    ;    cslog_all .sort()
-    cslog_sour=list(filter(filter_cs_sour, cslog_all_))    ;    cslog_sour.sort()
+    cslog_all_ = list(filter(filter_cslogs, os.listdir(path_cslog)))
+    cslog_all  = list(filter(filter_cs_all , cslog_all_))
+    cslog_sour = list(filter(filter_cs_sour, cslog_all_))
+    cslog_all .sort()
+    cslog_sour.sort()
 
-    pslog_all_=list(filter(filter_pslogs, os.listdir(path_pslog)))
-    pslog_all =list(filter(filter_ps_all , pslog_all_))    ;    pslog_all .sort()
-    pslog_sour=list(filter(filter_ps_sour, pslog_all_))    ;    pslog_sour.sort()
+    pslog_all_ = list(filter(filter_pslogs, os.listdir(path_pslog)))
+    pslog_all  = list(filter(filter_ps_all , pslog_all_))
+    pslog_sour = list(filter(filter_ps_sour, pslog_all_))
+    pslog_all .sort()
+    pslog_sour.sort()
 
     writelog(path_dir, pipe_log, f"***** Open SDD File : {file} (File Number:{int(Nfile+1)}) *****", "a")
-    pipe_cs = CrossScan(path_p=path_p, path_c=path_c, path_dir=path_dir, file=file, station=station, pipe_log=pipe_log)
-    pipe_cs.project  =project
-    pipe_cs.savecsfit=SaveCSFit
-    pipe_cs.nwalker  =nw
-    pipe_cs.nstep    =nr
+    pipe_cs = CrossScan(
+        path_p=path_p, path_c=path_c, path_dir=path_dir, file=file,
+        station=station, pipe_log=pipe_log
+    )
+    pipe_cs.project = project
+    pipe_cs.savecsfit = SaveCSFit
+    pipe_cs.nwalker = nw
+    pipe_cs.nstep = nr
 
     writelog(path_dir, pipe_log, "Initial CS-Setting is Done.", "a")
     pipe_cs.set_init()
-    pipe_cs.saveplot=SaveCSLog
-    Ncslog=len(cslog_sour)
-    if Ncslog==0:Ncslog=1
+    pipe_cs.saveplot = SaveCSLog
+    Ncslog = len(cslog_sour)
+    if Ncslog == 0:
+        Ncslog = 1
+
     for n in range(Ncslog):
         if n+1 not in version : continue
         if Run_CSFit:
             try:
                 writelog(path_dir, pipe_log, " ", "a")
-                pipe_cs.cs_log_all =pd.read_excel(path_cslog+cslog_all[n] , index_col=[0]).dropna(axis=0).reset_index(drop=True)
-                pipe_cs.cs_log_sour=pd.read_excel(path_cslog+cslog_sour[n], index_col=[0]).dropna(axis=0).reset_index(drop=True)
+                pipe_cs.cs_log_all  = pd.read_excel(path_cslog+cslog_all [n], index_col=[0]).dropna(axis=0).reset_index(drop=True)
+                pipe_cs.cs_log_sour = pd.read_excel(path_cslog+cslog_sour[n], index_col=[0]).dropna(axis=0).reset_index(drop=True)
                 writelog(path_dir, pipe_log, f"Load CS-Log Information from .xlsx Files (N={n+1}).", "a")
             except:
                 writelog(path_dir, pipe_log, f"Make CS-Log Information from SDD Fil.", "a")
                 pipe_cs.load_source_info(time_thresh=180)
 
-            if np.logical_or(pipe_cs.cs_log_all.shape[0]<64, pipe_cs.cs_log_sour.shape[0]<1):
+            if np.logical_or(
+                pipe_cs.cs_log_all.shape[0]<64,
+                pipe_cs.cs_log_sour.shape[0]<1
+            ):
                 writelog(path_dir, pipe_log, f"Not Enough Data to proceed CS.", "a")
                 writelog(path_dir, pipe_log, f"End Processes for the SDD File : {file} !!!", "a")
                 writelog(path_dir, pipe_log, " ", "a")
@@ -215,7 +228,6 @@ for Nfile, file in enumerate(files):
                 writelog(path_dir, pipe_log, " ", "a")
                 writelog(path_dir, pipe_log, "--------------------------------------------------", "a")
                 continue
-            #continue
 
             pipe_cs.cs_log_all ["ScanNum"]=pipe_cs.cs_log_all ["ScanNum"].astype(int)
             pipe_cs.cs_log_all ["Freq"   ]=pipe_cs.cs_log_all ["Freq"   ].astype(int)
@@ -225,7 +237,8 @@ for Nfile, file in enumerate(files):
             pipe_cs.cs_log_sour["Scan1"  ]=pipe_cs.cs_log_sour["Scan1"  ].astype(int)
             pipe_cs.cs_log_sour["Scan2"  ]=pipe_cs.cs_log_sour["Scan2"  ].astype(int)
 
-            date1, date2=np.array(pipe_cs.cs_log_sour["Date"])[0], np.array(pipe_cs.cs_log_sour["Date"])[-1]
+            date1 = np.array(pipe_cs.cs_log_sour["Date"])[0]
+            date2 = np.array(pipe_cs.cs_log_sour["Date"])[-1]
             mjd_diff=Ati(date2, format="iso").mjd-Ati(date1, format="iso").mjd
             writelog(path_dir, pipe_log, f"CS-Observing Date : {date1} to {date2} ({mjd_diff:.2f} day)", "a")
             writelog(path_dir, pipe_log, f"Run Cross-Scan Fitting.", "a")
@@ -236,39 +249,42 @@ for Nfile, file in enumerate(files):
 
             npol = pipe_cs.npol
 
+
         """
         Position-Switching
         """
         writelog(path_dir, pipe_log, "Start Position-Switching", "a")
-        pipe_pos = PoSwitch(path_p=path_p, path_c=path_c  , path_dir=path_dir,
-                            file=file    , station=station, unpol_all=Unpols ,
-                            aref_n=Aref  , lr_swap=LR_Swap, pipe_log=pipe_log)
+        pipe_pos = PoSwitch(
+            path_p=path_p, path_c=path_c, path_dir=path_dir,
+            file=file, station=station, unpol_all=Unpols,
+            aref_n=Aref, lr_swap=LR_Swap, pipe_log=pipe_log
+        )
         try:
-            pipe_pos.eta1=unp.sqrt(pipe_cs.eta_l_1*pipe_cs.eta_r_1)
-            pipe_pos.eta2=unp.sqrt(pipe_cs.eta_l_2*pipe_cs.eta_r_2)
+            pipe_pos.eta1 = unp.sqrt(pipe_cs.eta_l_1*pipe_cs.eta_r_1)
+            pipe_pos.eta2 = unp.sqrt(pipe_cs.eta_l_2*pipe_cs.eta_r_2)
         except:
             try:
-                pipe_pos.eta1=unp.sqrt(pipe_cs.eta_l_1*pipe_cs.eta_r_1)
-                pipe_pos.eta2=np.nan
+                pipe_pos.eta1 = unp.sqrt(pipe_cs.eta_l_1*pipe_cs.eta_r_1)
+                pipe_pos.eta2 = np.nan
             except:
-                pipe_pos.eta1=np.nan
-                pipe_pos.eta2=np.nan
+                pipe_pos.eta1 = np.nan
+                pipe_pos.eta2 = np.nan
         writelog(path_dir, pipe_log, "Initial PS-Setting is Done.", "a")
         pipe_pos.set_init()
         pipe_pos.SaveACPlot = SaveACPlot
 
         pslog = file.replace(".sdd", ".xlsx")     # log file name
-        pipe_pos.savepslog=SavePSLog
-        pipe_pos.log      =pslog
+        pipe_pos.savepslog = SavePSLog
+        pipe_pos.log = pslog
         try:
             writelog(path_dir, pipe_log, f"Load PS-Log Information from .xlsx Files (N={n+1}).", "a")
-            pipe_pos.pos_log_all =pd.read_excel(path_pslog+pslog_all [n]).dropna(axis=0).reset_index(drop=True)
-            pipe_pos.pos_log_sour=pd.read_excel(path_pslog+pslog_sour[n] , index_col=[0]).reset_index(drop=True)
+            pipe_pos.pos_log_all  = pd.read_excel(path_pslog+pslog_all [n]).dropna(axis=0) .reset_index(drop=True)
+            pipe_pos.pos_log_sour = pd.read_excel(path_pslog+pslog_sour[n] , index_col=[0]).reset_index(drop=True)
         except:
             writelog(path_dir, pipe_log, f"Make PS-Log Information from SDD File.", "a")
             pipe_pos.load_source_info()
 
-        if pipe_pos.pos_log_all.shape[0]<2112:
+        if pipe_pos.pos_log_all.shape[0] < 2112:
             writelog(path_dir, pipe_log, f"Not Enough Data to proceed PS.", "a")
             writelog(path_dir, pipe_log, f"End Processes for the SDD File : {file} !!!", "a")
             writelog(path_dir, pipe_log, " ", "a")
@@ -278,15 +294,15 @@ for Nfile, file in enumerate(files):
             continue
 
 
-        pipe_pos.pos_log_all ["Freq"   ]=pipe_pos.pos_log_all ["Freq"   ].astype(int)
-        pipe_pos.pos_log_all ["ScanNum"]=pipe_pos.pos_log_all ["ScanNum"].astype(int)
-        pipe_pos.pos_log_sour["Nscan"  ]=pipe_pos.pos_log_sour["Nscan"  ].astype(int)
-        pipe_pos.pos_log_sour["Nrep"   ]=pipe_pos.pos_log_sour["Nrep"   ].astype(int)
-        pipe_pos.pos_log_sour["ScanNum"]=pipe_pos.pos_log_sour["ScanNum"].astype(int)
-        pipe_pos.npol=len(np.unique(np.array(pipe_pos.pos_log_all ["Freq"])))
+        pipe_pos.pos_log_all ["Freq"   ] = pipe_pos.pos_log_all ["Freq"   ].astype(int)
+        pipe_pos.pos_log_all ["ScanNum"] = pipe_pos.pos_log_all ["ScanNum"].astype(int)
+        pipe_pos.pos_log_sour["Nscan"  ] = pipe_pos.pos_log_sour["Nscan"  ].astype(int)
+        pipe_pos.pos_log_sour["Nrep"   ] = pipe_pos.pos_log_sour["Nrep"   ].astype(int)
+        pipe_pos.pos_log_sour["ScanNum"] = pipe_pos.pos_log_sour["ScanNum"].astype(int)
+        pipe_pos.npol = len(np.unique(np.array(pipe_pos.pos_log_all ["Freq"])))
 
-        date1, date2=np.array(pipe_pos.pos_log_sour["Date"])[0], np.array(pipe_pos.pos_log_sour["Date"])[-1]
-        mjd_diff=Ati(date2, format="iso").mjd-Ati(date1, format="iso").mjd
+        date1, date2 = np.array(pipe_pos.pos_log_sour["Date"])[0], np.array(pipe_pos.pos_log_sour["Date"])[-1]
+        mjd_diff = Ati(date2, format="iso").mjd-Ati(date1, format="iso").mjd
         writelog(path_dir, pipe_log, f"PS-Observing Date : {date1} to {date2} ({mjd_diff:.2f} day)", "a")
         writelog(path_dir, pipe_log, f"Get Calibrator Info.", "a")
         pipe_pos.get_info_calib()
@@ -304,25 +320,42 @@ for Nfile, file in enumerate(files):
             writelog(path_dir, pipe_log, "Save PS-Log (Tsys, tau, Elevation)", "a")
             pipe_pos.SavePSLog()
 
-        if   Polnum==0:pol_range=range(1,3)
-        elif Polnum==1:pol_range=range(1,2)
-        elif Polnum==2:pol_range=range(2,3)
-        if pipe_pos.npol==1:pol_range=range(1,2)
+        if   Polnum == 0:
+            pol_range=range(1,3)
+        elif Polnum == 1:
+            pol_range=range(1,2)
+        elif Polnum == 2:
+            pol_range=range(2,3)
+
+        if pipe_pos.npol == 1:
+            pol_range = range(1,2)
+
         sour_lst = pipe_pos.pos_log_sour["Source"].tolist()
+
         for Npn in pol_range:
-            pipe_pos.polnum=Npn
-            pipe_pos.freq  =pipe_pos.freqs[Npn-1]
-            if np.logical_and(not pipe_pos.unpols_n, "3C84" in sour_lst):
-                pipe_pos.unpols_n=["3C84"]
+            pipe_pos.polnum = Npn
+            pipe_pos.freq = pipe_pos.freqs[Npn-1]
+
+            if np.logical_and(
+                not pipe_pos.unpols_n,
+                "3C84" in sour_lst
+            ):
+                pipe_pos.unpols_n = ["3C84"]
+
             for Nunp, unpol in enumerate(pipe_pos.unpols_n):
-                pipe_pos.unpol=unpol
-                pipe_pos.bad_chans=flag_scans[Npn-1]
+                pipe_pos.unpol = unpol
+                pipe_pos.bad_chans = flag_scans[Npn-1]
+
                 if Auto_Flag:
-                    pipe_pos.autoflag =Auto_Flag
-                if str(pipe_pos.freq)=="129" : pipe_pos.lr_swap=True
+                    pipe_pos.autoflag = Auto_Flag
+
+                if str(pipe_pos.freq) == "129":
+                    pipe_pos.lr_swap=True
+
                 writelog(path_dir, pipe_log, f"Run Position-Switching (Unpol:{unpol} | Freq:{pipe_pos.freq} GHz).", "a")
                 pipe_pos.out_pang = pd.DataFrame([])
                 pipe_pos.run_pos()
+
     writelog(path_dir, pipe_log, f"End Processes for the SDD File : {file} !!!", "a")
     writelog(path_dir, pipe_log, " ", "a")
     writelog(path_dir, pipe_log, " ", "a")

@@ -60,7 +60,6 @@ class PosPolScan:
         """
         self.v0, self.v0_vfc, c_p, g_p = read_vane(c_p, g_p, scannum)
 
-
         nch   = len(self.v0[0])
         chans = np.arange(nch)
         Lpol  = self.v0[2] + 1j*self.v0[3]  # Linearly polarized intensity
