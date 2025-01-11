@@ -1,5 +1,6 @@
 # MOGABA_pipeline
 The Python scripts calibrate polarization data observed by the Korean VLBI Network (KVN) in single-dish mode.
+Please see also 'guide_to_results.pdf' as well.
 
 Python-library dependency:
   - emcee (https://emcee.readthedocs.io/en/stable/tutorials/line/)
@@ -46,7 +47,7 @@ Notes:
     : If you want to check the auto-correlated (LL, RR) power spectrum 
       obtained from position-switching (POS) observation, then set 'True' the 'SaveACPlot'.
 
-    : If the signal streams into LCP and RCP signal is switched, set 'LR_Swap' as 'True'. Please note that LCP-RCP swapping is forced at 129 GHz (@ L:352).
+    : If the signal streams into LCP and RCP signal is switched, set 'LR_Swap' as 'True'. Please note that LCP-RCP swapping is forced at 129 GHz (@ L:353).
       * You can remove the line if you do not want to force the swapping at 129 GHz.
 
   - Basically, only the three planets are used as d-term calibrators (Venus, Mars, Jupiter),

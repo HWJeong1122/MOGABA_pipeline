@@ -8,7 +8,7 @@ from mogaba_pipe_pos         import *
 SaveCSFit  = True           # if  'True', save cross-scan Gaussian fitting plots
 SaveCSLog  = True           # if  'True', save cross-scan log info
 SavePSLog  = True           # if  'True', save position-switching log info
-SaveACPlot = False          # !!! Please note that LR-swapping is forecd at 129 GHz (@ line 200) !!!
+SaveACPlot = False          # !!! Please note that LR-swapping is forecd at 129 GHz (@ line 353) !!!
 Auto_Flag  = False          # if  'True', auto-flagging mode is applied to bad scan(s) in position-switching data
 Run_CSFit  = True           # if 'True', cross-scan fit will be performed using the MCMC ; elsewhere, skip cs-fit
 LR_Swap    = False          # set 'True' if you want to swap into RL pol order
@@ -19,22 +19,23 @@ nw, nr  = 5*2, 2000         # the number of walkers & total step of MCMC in cs-p
 Polnum  = 0                 # 0:all(1&2) / 1:1-only / 2:2-only
                             #   e.g., 1 and 2 mean K- and Q-band for KQ data
 
-# path_p     = "absolute/path/to/your/sdd/files/"
-# path_c     = "relative/path/to/your/sdd/files/"
-# path_dir   = "path/to/your/working/directory/"
-# path_cslog = "path/to/your/working/directory/data_cs/"
-# path_pslog = path_p
-
-path_p     = f"{dropbox_path}/ForShare/MOGABA_pipe/FITS/"           # sdd directory (python)
-path_c     = f"~/Dropbox/ForShare/MOGABA_pipe/FITS/"                # sdd directory (GILDAS/CLASS)
-path_dir   = f"{dropbox_path}/ForShare/MOGABA_pipe/"                # working directory
-path_cslog = f"{dropbox_path}/ForShare/MOGABA_pipe/data_cs/"
+path_p     = "absolute/path/to/your/sdd/files/"             # sdd directory (python)
+path_c     = "relative/path/to/your/sdd/files/"             # sdd directory (GILDAS/CLASS)
+path_dir   = "path/to/your/working/directory/"              # working directory
+path_cslog = "path/to/your/working/directory/data_cs/"
 path_pslog = path_p
+
+# path_p     = f"{dropbox_path}/ForShare/MOGABA_pipe/FITS/" # sdd directory (python)
+# path_c     = f"~/Dropbox/ForShare/MOGABA_pipe/FITS/"      # sdd directory (GILDAS/CLASS)
+# path_dir   = f"{dropbox_path}/ForShare/MOGABA_pipe/"      # working directory
+# path_cslog = f"{dropbox_path}/ForShare/MOGABA_pipe/data_cs/"
+# path_pslog = path_p
 
 pipe_log = f"mogaba_pipelog_{antenna}_SE.log"
 
 files = [
 # files to run
+# you may need to download the data from the server! (e.g., 'scp' command)
 "MOGABA_K_11_KTN.sdd"
 ]
 
