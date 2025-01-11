@@ -1,0 +1,49 @@
+(2025-01-10 17:14:55) ***** Open SDD File : MOGABA_K_11_KTN.sdd (File Number:1) *****
+(2025-01-10 17:14:55) Initial CS-Setting is Done.
+(2025-01-10 17:14:55)  
+(2025-01-10 17:14:55) Load CS-Log Information from .xlsx Files (N=1).
+(2025-01-10 17:14:55) CS-Observing Date : 2011-11-21 12:02:14 to 2011-11-22 01:44:50 (0.57 day)
+(2025-01-10 17:14:55) Run Cross-Scan Fitting.
+(2025-01-10 17시 20분 17초) End Cross-Scan Fitting.
+(2025-01-10 17시 20분 17초)  
+(2025-01-10 17시 20분 17초) Start Position-Switching
+(2025-01-10 17시 20분 17초) Initial PS-Setting is Done.
+(2025-01-10 17시 20분 17초) Load PS-Log Information from .xlsx Files (N=1).
+(2025-01-10 17시 20분 20초) PS-Observing Date : 2011-11-21 12:07:31.000 to 2011-11-22 01:55:07.000 (0.57 day)
+(2025-01-10 17시 20분 20초) Get Calibrator Info.
+(2025-01-10 17시 20분 20초) Save PS-Log (Tsys, tau, Elevation)
+(2025-01-10 17시 20분 23초) Run Position-Switching (Unpol:Jupiter | Freq:21 GHz).
+(2025-01-10 17시 20분 42초) Run Position-Switching (Unpol:Mars | Freq:21 GHz).
+(2025-01-10 17시 21분 00초)  
+(2025-01-10 17시 21분 00초) Load CS-Log Information from .xlsx Files (N=2).
+(2025-01-10 17시 21분 00초) CS-Observing Date : 2011-11-25 23:46:59 to 2011-11-26 20:02:09 (0.84 day)
+(2025-01-10 17시 21분 00초) Run Cross-Scan Fitting.
+(2025-01-10 17시 28분 33초) End Cross-Scan Fitting.
+(2025-01-10 17시 28분 33초)  
+(2025-01-10 17시 28분 33초) Start Position-Switching
+(2025-01-10 17시 28분 33초) Initial PS-Setting is Done.
+(2025-01-10 17시 28분 33초) Load PS-Log Information from .xlsx Files (N=2).
+(2025-01-10 17시 28분 37초) PS-Observing Date : 2011-11-26 00:23:02.000 to 2011-11-26 19:32:25.000 (0.80 day)
+(2025-01-10 17시 28분 37초) Get Calibrator Info.
+(2025-01-10 17시 28분 37초) Save PS-Log (Tsys, tau, Elevation)
+(2025-01-10 17시 28분 42초) Run Position-Switching (Unpol:Jupiter | Freq:21 GHz).
+(2025-01-10 17시 29분 07초) Run Position-Switching (Unpol:Mars | Freq:21 GHz).
+(2025-01-10 17시 29분 33초)  
+(2025-01-10 17시 29분 33초) Load CS-Log Information from .xlsx Files (N=3).
+(2025-01-10 17시 29분 33초) CS-Observing Date : 2011-12-05 11:20:21 to 2011-12-06 01:04:49 (0.57 day)
+(2025-01-10 17시 29분 33초) Run Cross-Scan Fitting.
+(2025-01-10 17시 34분 50초) End Cross-Scan Fitting.
+(2025-01-10 17시 34분 50초)  
+(2025-01-10 17시 34분 50초) Start Position-Switching
+(2025-01-10 17시 34분 50초) Initial PS-Setting is Done.
+(2025-01-10 17시 34분 50초) Load PS-Log Information from .xlsx Files (N=3).
+(2025-01-10 17시 34분 54초) PS-Observing Date : 2011-12-04 11:25:33.000 to 2011-12-06 01:15:08.000 (1.58 day)
+(2025-01-10 17시 34분 54초) Get Calibrator Info.
+(2025-01-10 17시 34분 54초) Save PS-Log (Tsys, tau, Elevation)
+(2025-01-10 17시 34분 57초) Run Position-Switching (Unpol:Jupiter | Freq:21 GHz).
+(2025-01-10 17시 35분 16초) Run Position-Switching (Unpol:Mars | Freq:21 GHz).
+(2025-01-10 17시 35분 35초) End Processes for the SDD File : MOGABA_K_11_KTN.sdd !!!
+(2025-01-10 17시 35분 35초)  
+(2025-01-10 17시 35분 35초)  
+(2025-01-10 17시 35분 35초)  
+(2025-01-10 17시 35분 35초) --------------------------------------------------
