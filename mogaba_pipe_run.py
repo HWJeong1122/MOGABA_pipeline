@@ -5,14 +5,14 @@ from mogaba_pipe_polscripts  import *
 from mogaba_pipe_pos         import *
 
 """ MOGABA pipeline script """
-SaveCSFit  = True           # if  'True', save cross-scan Gaussian fitting plots
-SaveCSLog  = True           # if  'True', save cross-scan log info
-SavePSLog  = True           # if  'True', save position-switching log info
-SaveACPlot = False          # !!! Please note that LR-swapping is forecd at 129 GHz (@ line 353) !!!
-Auto_Flag  = False          # if  'True', auto-flagging mode is applied to bad scan(s) in position-switching data
+SaveCSFit  = True           # if 'True', save cross-scan Gaussian fitting plots
+SaveCSLog  = True           # if 'True', save cross-scan log info
+SavePSLog  = True           # if 'True', save position-switching log info
+SaveACPlot = False          # if 'True', auto-correlation plots will be saved
+Auto_Flag  = False          # if 'True', auto-flagging mode is applied in position-switching data
 Run_CSFit  = True           # if 'True', cross-scan fit will be performed using the MCMC ; elsewhere, skip cs-fit
-LR_Swap    = False          # set 'True' if you want to swap into RL pol order
-                            # * NOTE: LR_Swap is forces to be 'True' at D-band
+LR_Swap    = False          # if 'True', LR rx-pol switches to RL rx-pol
+                            # !!! Please note that LR-swapping is forecd at 129 GHz (@ line 353) !!!
 antenna = f"tn".upper()
 station = f"K{antenna}"     # should be in format of 'KYS' / 'KUS' / 'KPC' / 'KTN'
 nw, nr  = 5*2, 2000         # the number of walkers & total step of MCMC in cs-profile fitting
